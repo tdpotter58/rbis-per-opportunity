@@ -73,6 +73,9 @@ for(i in 1:30){
           else if(str_detect(plays[val,"Play.Description"],"Caught Stealing") || str_detect(plays[val,"Play.Description"],"Picked off")){
             #print("No PA")
           }
+          else if(str_detect(plays[val,"Play.Description"],"Walk") || str_detect(plays[val,"Play.Description"],"Hit By Pitch")){
+            
+          }
           else{
             #print(plays[val,"Batter"])
             rbi <- 0
@@ -169,6 +172,9 @@ for(i in 1:30){
           }
           else if(str_detect(plays[val,"Play.Description"],"Caught Stealing") || str_detect(plays[val,"Play.Description"],"Picked off")){
             #print("No PA")
+          }
+          else if(str_detect(plays[val,"Play.Description"],"Walk") || str_detect(plays[val,"Play.Description"],"Hit By Pitch")){
+            
           }
           else{
             #print(plays[val,"Batter"])
