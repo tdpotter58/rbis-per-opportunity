@@ -1,4 +1,6 @@
-
+library(pracma)
+library(rvest)
+library(xml2)
 
 #List of all team abbreviations
 teams <- c("ARI","ATL","BAL","BOS","CHC","CHW","CIN","CLE",

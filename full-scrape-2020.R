@@ -111,8 +111,8 @@ for(i in 1:30){
     }
   }
 }
-write.xlsx(rbis, "c:/users/tdpot/rbis/2020_rbis.xlsx")
-
+#write.xlsx(rbis, "c:/users/tdpot/rbis/2020_rbis.xlsx")
+write.xlsx(rbis, "c:/users/Tim/tim-project/rbis-per-opportunity/2020_rbis.xlsx")
 
 for(i in 1:30){
   for(j in 1:81){
