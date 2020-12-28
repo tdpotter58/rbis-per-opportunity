@@ -5,18 +5,19 @@ library(ggrepel)
 
 theme_set(theme_bw())
 
-rbis_2020 <- read.xlsx("C:/Users/Tim/tim-project/rbis-per-opportunity/2020_rbis.xlsx", sheetIndex = 1)
-rbis_2020 <- read.csv("C:/Users/Tim/tim-project/rbis-per-opportunity/2020_rbis.csv")
-rbis_2020 <- rbis %>%
+#rbis_2020 <- read.xlsx("C:/Users/Tim/tim-project/rbis-per-opportunity/2020_rbis.xlsx", sheetIndex = 1)
+#rbis_2020 <- read.csv("C:/Users/Tim/tim-project/rbis-per-opportunity/2020_rbis.csv")
+
+rbis_2020 <- df_2020 %>%
   mutate(rbi_percentage = round(RBI / Chances, digits = 4))
 
 rbis_2020 %>%
   filter(Chances > 5) %>%
   ggplot(aes(x = Chances, y = rbi_percentage, label = Player)) + 
   #geom_point() +
-  geom_point(data = subset(rbis_2020, Chances >= 30 | (Chances > 5 & rbi_percentage >= 0.6))) + 
-  geom_text(data = subset(rbis_2020, Chances < 30 & (Chances > 5 & rbi_percentage < 0.6))) +
-  geom_label_repel(data = subset(rbis_2020, Chances >= 30 | (Chances > 5 & rbi_percentage >= 0.6)), aes(fill = RBI)) +
+  geom_point(data = subset(rbis_2020, Chances >= 26 | (Chances > 5 & rbi_percentage > 0.6))) + 
+  geom_text(data = subset(rbis_2020, Chances < 26 & (Chances > 5 & rbi_percentage <= 0.6))) +
+  geom_label_repel(data = subset(rbis_2020, Chances >= 26 | (Chances > 5 & rbi_percentage > 0.6)), aes(fill = RBI)) +
   scale_fill_gradient(low = 'blue', high = 'red')
 
 rbis_anal <- rbis %>%

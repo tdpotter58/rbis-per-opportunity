@@ -88,3 +88,230 @@ for(x in num){
   }
 }
 
+#Dataframe to store all home dates for each team
+home_games_2018 <- data.frame(matrix(nrow = 82, ncol = 30))
+colnames(home_games_2018) <- teams
+
+#Loop through each team
+for(x in num){
+  #Get the url for each team page
+  #This is where we get the dates of each game
+  url <- "https://www.baseball-reference.com/teams/"
+  url <- strcat(url, teams[x])
+  url <- strcat(url, "/2018-schedule-scores.shtml")
+  print(url)
+  team <- teams[x]
+  sched_url <- read_html(url)
+  
+  #Get our table
+  schedules <- xml_find_all(sched_url, "//table") %>% html_table
+  
+  schedules <- as.data.frame(schedules)
+  
+  #Basically 1-162
+  games <- c(1:nrow(schedules))
+  #Where we are in the home_games_2018 df
+  t <- 1
+  #Loop throgu each game the team played
+  for(i in games){
+    #Find games where our team was the home team
+    if(schedules[i,"Gm."] != "Gm#" & schedules[i,"Var.5"] != "@"){
+      #Extract the date and convert it to what we want
+      date <- strsplit(schedules[i,"Date"], "\\s+")
+      month <- sapply(date ,`[`, 2)
+      day <- sapply(date, `[`, 3)
+      #For formatting, add a leading zero to a single digit day
+      if(nchar(day) == 1){
+        day <- strcat("0",day)
+      }
+      #Convert the month name to a number
+      if(month == "Mar"){
+        d <- "03"
+        d <- strcat(d, day)
+      }
+      else if(month == "Apr"){
+        d <- "04"
+        d <- strcat(d, day)
+      }
+      else if(month == "May"){
+        d <- "05"
+        d <- strcat(d, day)
+      }
+      else if(month == "Jun"){
+        d <- "06"
+        d <- strcat(d, day)
+      }
+      else if(month == "Jul"){
+        d <- "07"
+        d <- strcat(d, day)
+      }
+      else if(month == "Aug"){
+        d <- "08"
+        d <- strcat(d, day)
+      }
+      else if(month == "Sep"){
+        d <- "09"
+        d <- strcat(d, day)
+      }
+      else if(month == "Oct"){
+        d <- "10"
+        d <- strcat(d, day)
+      }
+      #Add the date to the dataframe
+      home_games_2018[t,team] <- d
+      t <- t + 1
+    }
+  }
+}
+
+#Dataframe to store all home dates for each team
+home_games_2017 <- data.frame(matrix(nrow = 84, ncol = 30))
+colnames(home_games_2017) <- teams
+
+#Loop through each team
+for(x in num){
+  #Get the url for each team page
+  #This is where we get the dates of each game
+  url <- "https://www.baseball-reference.com/teams/"
+  url <- strcat(url, teams[x])
+  url <- strcat(url, "/2017-schedule-scores.shtml")
+  print(url)
+  team <- teams[x]
+  sched_url <- read_html(url)
+  
+  #Get our table
+  schedules <- xml_find_all(sched_url, "//table") %>% html_table
+  
+  schedules <- as.data.frame(schedules)
+  
+  #Basically 1-162
+  games <- c(1:nrow(schedules))
+  #Where we are in the home_games_2017 df
+  t <- 1
+  #Loop throgu each game the team played
+  for(i in games){
+    #Find games where our team was the home team
+    if(schedules[i,"Gm."] != "Gm#" & schedules[i,"Var.5"] != "@"){
+      #Extract the date and convert it to what we want
+      date <- strsplit(schedules[i,"Date"], "\\s+")
+      month <- sapply(date ,`[`, 2)
+      day <- sapply(date, `[`, 3)
+      #For formatting, add a leading zero to a single digit day
+      if(nchar(day) == 1){
+        day <- strcat("0",day)
+      }
+      #Convert the month name to a number
+      if(month == "Mar"){
+        d <- "03"
+        d <- strcat(d, day)
+      }
+      else if(month == "Apr"){
+        d <- "04"
+        d <- strcat(d, day)
+      }
+      else if(month == "May"){
+        d <- "05"
+        d <- strcat(d, day)
+      }
+      else if(month == "Jun"){
+        d <- "06"
+        d <- strcat(d, day)
+      }
+      else if(month == "Jul"){
+        d <- "07"
+        d <- strcat(d, day)
+      }
+      else if(month == "Aug"){
+        d <- "08"
+        d <- strcat(d, day)
+      }
+      else if(month == "Sep"){
+        d <- "09"
+        d <- strcat(d, day)
+      }
+      else if(month == "Oct"){
+        d <- "10"
+        d <- strcat(d, day)
+      }
+      #Add the date to the dataframe
+      home_games_2017[t,team] <- d
+      t <- t + 1
+    }
+  }
+}
+
+#Dataframe to store all home dates for each team
+home_games_2016 <- data.frame(matrix(nrow = 81, ncol = 30))
+colnames(home_games_2016) <- teams
+
+#Loop through each team
+for(x in num){
+  #Get the url for each team page
+  #This is where we get the dates of each game
+  url <- "https://www.baseball-reference.com/teams/"
+  url <- strcat(url, teams[x])
+  url <- strcat(url, "/2016-schedule-scores.shtml")
+  print(url)
+  team <- teams[x]
+  sched_url <- read_html(url)
+  
+  #Get our table
+  schedules <- xml_find_all(sched_url, "//table") %>% html_table
+  
+  schedules <- as.data.frame(schedules)
+  
+  #Basically 1-162
+  games <- c(1:nrow(schedules))
+  #Where we are in the home_games_2016 df
+  t <- 1
+  #Loop throgu each game the team played
+  for(i in games){
+    #Find games where our team was the home team
+    if(schedules[i,"Gm."] != "Gm#" & schedules[i,"Var.5"] != "@"){
+      #Extract the date and convert it to what we want
+      date <- strsplit(schedules[i,"Date"], "\\s+")
+      month <- sapply(date ,`[`, 2)
+      day <- sapply(date, `[`, 3)
+      #For formatting, add a leading zero to a single digit day
+      if(nchar(day) == 1){
+        day <- strcat("0",day)
+      }
+      #Convert the month name to a number
+      if(month == "Mar"){
+        d <- "03"
+        d <- strcat(d, day)
+      }
+      else if(month == "Apr"){
+        d <- "04"
+        d <- strcat(d, day)
+      }
+      else if(month == "May"){
+        d <- "05"
+        d <- strcat(d, day)
+      }
+      else if(month == "Jun"){
+        d <- "06"
+        d <- strcat(d, day)
+      }
+      else if(month == "Jul"){
+        d <- "07"
+        d <- strcat(d, day)
+      }
+      else if(month == "Aug"){
+        d <- "08"
+        d <- strcat(d, day)
+      }
+      else if(month == "Sep"){
+        d <- "09"
+        d <- strcat(d, day)
+      }
+      else if(month == "Oct"){
+        d <- "10"
+        d <- strcat(d, day)
+      }
+      #Add the date to the dataframe
+      home_games_2016[t,team] <- d
+      t <- t + 1
+    }
+  }
+}
