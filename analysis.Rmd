@@ -1,0 +1,102 @@
+---
+title: "RBI's per Opportunity"
+author: "Tim Potter"
+date: "December 27, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+theme_set(theme_bw())
+#rbis_2020 <- df_2020 %>%
+#  mutate(rbi_percentage = round(RBI / Chances, digits = 4))
+
+rbis_2020 <- read.csv("C:/users/tdpot/rbis/rbis-per-opportunity/rbis-2020.csv")
+rbis_2020 <- rbis_2020 %>%
+  mutate(rbi_percentage = round(RBI / Chances, digits = 4))
+
+
+rbis_full <- read.csv("C:/users/tdpot/rbis/rbis-per-opportunity/rbis-full.csv")
+rbis_full <- rbis_full %>%
+  mutate(rbi_percentage = round(RBI / Chances, digits = 4))
+```
+
+## RBI per Opportunity
+
+  The basis of this exploration was comes from a difference of opinions, so to speak. The RBI has long been a staple of baseball statistics and has been heavily relied on to determine a player's value for decades. That way of thinking is shifting in the modern era. Sure, driving runs in is important, but a batter can normally only drive in runs if the players ahead of him are providing an opportunity. Is one player more impactful than another simply because his teammates are better at getting on base? 
+  
+  That's not what I really care about here. Instead, I wanted to find what players were good at driving in the runners they were given. To do this, I scraped box scores from every MLB game from 2016-2020. I pulled every instance of a runner at third base, a prime RBI chance for batters, and tracked how often each batter was able to drive the runner in. Walks and Hit-By-Pitches were considered no opportunities, as the bat was taken out of the hitter's hand. With this data, I could find what players were given the most opportunites, and who was both efficient or inefficient in these situations.
+  
+##Data From the 2020 MLB Season
+
+
+```{r 2020, out.width= '150%'}
+head(rbis_2020[order(-rbis_2020$RBI),])
+head(rbis_2020[order(-rbis_2020$Chances),])
+mean_2020 <- sum(rbis_2020[["RBI"]]) / sum(rbis_2020[["Chances"]])
+
+
+rbis_2020_5 <- rbis_2020 %>%
+  filter(Chances > 4)
+head(rbis_2020_5[order(rbis_2020_5$rbi_percentage,-rbis_2020_5$Chances),])
+head(rbis_2020_5[order(-rbis_2020_5$rbi_percentage,-rbis_2020_5$Chances),])
+
+rbis_2020 %>%
+  filter(Chances > 4) %>%
+  ggplot(aes(x = Chances, y = rbi_percentage, label = Player)) + 
+  geom_hline(yintercept = mean_2020, linetype = "dashed", color = "red", size = 2) +
+  #geom_point() +
+  geom_point(data = subset(rbis_2020, Chances >= 29 | (Chances > 4 & rbi_percentage > 0.65))) + 
+  geom_text(data = subset(rbis_2020, Chances < 29 & (Chances > 4 & rbi_percentage <= 0.65)),size = 3) +
+  geom_label_repel(data = subset(rbis_2020, Chances >= 29 | (Chances > 4 & rbi_percentage > 0.65)), aes(fill = RBI),size = 3) +
+  scale_fill_gradient(low = 'blue', high = 'red') +
+  ggtitle("RBI Earned with Runner at Third Base, 2020") +
+  xlab("At-Bats with a Runner at Third Base")+
+  ylab("Proportion of Runners Batted In") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(caption = "League Average = 0.376")
+```
+
+This is the data from the 2020 season. The first thing that jumps out are the worst performers. Andrelton Simmons and Johan Camargo both managed to go 0-11 in RBI chances, the most opportunities without an RBI of anyone this season. Just as noteworthy is Evan Longoria. Longoria was 1 of 4 players to get 30 or more chances with a runner on 3rd base, but his 30% RBI percentage(9 of 30) was significantly lower than the other 3. For reference, the average RBI percenage for the 2020 season was 0.3468. 
+
+
+##Data From 2016-2020
+
+
+```{r full, fig.width= 10, fig.height = 6}
+head(rbis_full[order(-rbis_full$RBI),])
+head(rbis_full[order(-rbis_full$Chances),])
+
+rbis_full_20 <- rbis_full %>%
+  filter(Chances > 20)
+head(rbis_full_20[order(rbis_full_20$rbi_percentage,-rbis_full_20$Chances),])
+head(rbis_full_20[order(-rbis_full_20$rbi_percentage,-rbis_full_20$Chances),])
+
+
+mean_full <- sum(rbis_full[["RBI"]]) / sum(rbis_full[["Chances"]])
+rbis_full %>%
+  filter(Chances > 20) %>%
+  ggplot(aes(x = Chances, y = rbi_percentage, label = Player)) + 
+  geom_hline(yintercept = mean_full, linetype = "dashed", color = "red", size = 2) +
+  geom_text() +
+  scale_fill_gradient(low = 'blue', high = 'red') +
+  ggtitle("RBI Earned with Runner at Third Base, 2016-2020") +
+  xlab("At-Bats with a Runner at Third Base")+
+  ylab("Proportion of Runners Batted In") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(caption = "League Average = 0.384")
+```
+
+I scraped the data from each of the last five seasons to get much larger sample sizes. Here's a few things that jumped out at me.
+
+* We find some hyper-efficient players with less than 50 opportunites. Luis Arraez and Prince Fielder were in a league of their own when it came to RBI efficiency. Of Course, with more chances those numbers would regress to the mean.
+* Of the bottom six players in RBI percentage, with a minimum of 20 chances, were pitchers. This is to be expected, as pitchers are generally poor offensively. Cathcer Luis Torrens was the worst position palyer, posting an abysmal 0.095 percentage.
+* Ovarall variability is great at lower number of chances, and gradually shrinks as the opportunity sizes grow. Every player that had 250 or more chances produced an RBI percentage greater than the league average of 0.384
+* Xander Bogaerts is a machine. He topped the leaderboard in both RBI and total Chances, and put up a 0.486 percentage. Mookie Betts, his teammate from 2016-2019, posted an absurd 0.536 percentage in 237 opportunities, the best percentage of anyone with over 100 chances.
+
+
+
+

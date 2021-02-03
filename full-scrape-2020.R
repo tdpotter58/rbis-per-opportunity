@@ -509,3 +509,6 @@ for(i in 1:30){
     }
   }
 }
+
+write.csv(df_2020, "C:\\Users\\tdpot\\rbis\\rbis-per-opportunity\\rbis-2020.csv", row.names = FALSE)
+write.csv(rbis, "C:\\Users\\tdpot\\rbis\\rbis-per-opportunity\\rbis-full.csv", row.names = FALSE)
